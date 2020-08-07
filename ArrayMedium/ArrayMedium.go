@@ -78,11 +78,101 @@ func tictactoe(board []string) string { // 面试题16.04 井字游戏
 	}
 }
 
+func merge1(intervals [][]int) [][]int { // 56. Merge Intervals 合并区间
+	var results [][]int // 返回结果
+	var m map[int]int   // key int值 value 有效位标识是否为边界数字 1:右边界数字 0:非边界数字 -1:左边界数字
+	m = make(map[int]int)
+	// step1:区间去重
+	for _, interval := range intervals { // 遍历外层
+		for i := interval[0]; i <= interval[1]; i++ { // 向map添加元素
+			if i == interval[0] {
+				m[i] = -1
+			} else if i == interval[1] {
+				m[i] = 1
+			} else {
+				m[i] = 0
+			}
+		}
+	}
+	// step2:排序
+	var intervalSortSet []int
+	for k, _ := range m {
+		intervalSortSet = append(intervalSortSet, k)
+	}
+	for i := 0; i < len(intervalSortSet); i++ { // 冒泡排序
+		for j := 0; j < len(intervalSortSet)-i-1; j++ {
+			if intervalSortSet[j] > intervalSortSet[j+1] {
+				intervalSortSet[j], intervalSortSet[j+1] = intervalSortSet[j+1], intervalSortSet[j]
+			}
+		}
+	}
+	// step3:隔断区间
+	var startindex int // 区间起始
+	var endindex int   // 区间终止
+	startindex = 0
+	for k, v := range intervalSortSet {
+		if k == len(intervalSortSet)-1 { // k是最后一个数
+			endindex = k
+			var tempinterval = make([]int, 2)
+			tempinterval[0] = intervalSortSet[startindex]
+			tempinterval[1] = intervalSortSet[endindex]
+			results = append(results, tempinterval[:]) // 区间添加 重新开始计算间隔
+		} else {
+			if (m[v] == -1 && m[intervalSortSet[k+1]] == 1 && v == intervalSortSet[k+1]-1) || v != intervalSortSet[k+1]-1 { // 如果当前跳动范围大于1 或者连续但是当前为左边界 下一个为右边界 隔断产生
+				endindex = k
+				var tempinterval = make([]int, 2)
+				tempinterval[0] = intervalSortSet[startindex]
+				tempinterval[1] = intervalSortSet[endindex]
+				results = append(results, tempinterval) // 区间添加 重新开始计算间隔
+				startindex = k + 1
+			}
+		}
+	}
+	return results
+}
+
+func merge(intervals [][]int) [][]int { // 56. Merge Intervals 合并区间
+	if len(intervals) == 0 {
+		return [][]int{}
+	}
+	var results [][]int // 返回结果
+	// step1 对区间进行排序 按照左端点大小进行排序
+	for i := 0; i < len(intervals); i++ { // 冒泡排序
+		for j := 0; j < len(intervals)-i-1; j++ {
+			if intervals[j][0] > intervals[j+1][0] { // 左端点按照从小到大排序
+				intervals[j], intervals[j+1] = intervals[j+1], intervals[j]
+			}
+		}
+	}
+	// step2 对区间进行合并
+	var tempinterval []int // 临时区间，用于更新右端点
+	tempinterval = make([]int, 2)
+	_ = copy(tempinterval, intervals[0])
+	for k, interval := range intervals {
+		if interval[0] > tempinterval[1] { // 直到左端点大于右端点为止
+			results = append(results, tempinterval)
+			tempinterval = interval
+			if k == len(intervals)-1 { // 如果到达最后一个节点
+				results = append(results, tempinterval)
+			}
+		} else { // 更新右端点
+			if tempinterval[1] < interval[1] {
+				tempinterval[1] = interval[1]
+			}
+			if k == len(intervals)-1 { // 如果到达最后一个区间
+				results = append(results, tempinterval)
+			}
+		}
+	}
+	return results
+}
+
 func movesToMakeZigzag(nums []int) int { // 1144. 递减元素使数组呈锯齿状
 
 }
 
 func main() {
+	log.Println("ArrayMedium")
 
 	// // 大小为k平均值大于阈值的子数组数目
 	// arr := []int{2, 2, 2, 2, 5, 5, 5, 8}
@@ -92,6 +182,16 @@ func main() {
 	// // 面试题 16.04 井字游戏
 	// board := []string{"O"}
 	// k := tictactoe(board)
+	// log.Println(k)
+
+	// // 56. 合并区间
+	// interval := [][]int{
+	// 	[]int{1, 3},
+	// 	[]int{2, 6},
+	// 	[]int{8, 10},
+	// 	[]int{15, 18},
+	// }
+	// k := merge(interval)
 	// log.Println(k)
 
 	// 1144. 递减元素使数组呈锯齿状
