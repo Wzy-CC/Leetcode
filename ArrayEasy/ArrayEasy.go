@@ -95,6 +95,44 @@ func merge(nums1 []int, m int, nums2 []int, n int) { // 88 合并两个有序数
 	}
 }
 
+func countCharacters(words []string, chars string) int { // 1106 拼写单词
+	var length = 0 // 输出数组长度
+
+	m := make(map[string]int) // 将chars保存至hash map
+	for _, char := range chars {
+		m[string(char)] = 0 // 对hash map初始化
+	}
+	for _, char := range chars {
+		m[string(char)]++ // 记录每种char的个数
+	}
+
+	for _, word := range words {
+
+		mclone := make(map[string]int)
+		for k, v := range m { // map深拷贝
+			mclone[k] = v
+		}
+
+		var canspell = true
+	for1:
+		for _, char := range word {
+			if _, ok := mclone[string(char)]; ok { // 如果键存在
+				mclone[string(char)]--
+				if mclone[string(char)] < 0 {
+					canspell = false
+				}
+			} else { // 如果键不存在
+				canspell = false
+				break for1
+			}
+		}
+		if canspell == true { // 如果可以拼写单词
+			length = length + len(word)
+		}
+	}
+	return length
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -123,4 +161,15 @@ func main() {
 	// n := 3
 	// merge(nums1, m, nums2, n)
 	// log.Println(nums1)
+
+	// // 拼写单词
+	// words1 := []string{"hello", "world", "leetcode"}
+	// chars1 := "welldonehoneyr"
+
+	// words2 := []string{"cat", "bt", "hat", "tree"}
+	// chars2 := "atach"
+
+	// k1 := countCharacters(words1, chars1)
+	// k2 := countCharacters(words2, chars2)
+	// log.Println(k1, k2)
 }
