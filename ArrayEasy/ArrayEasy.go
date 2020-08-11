@@ -149,6 +149,26 @@ func average(salary []int) float64 { // 1491. 去掉最低工资和最高工资�
 	return float64(sum-maxs-mins) / float64(len(salary)-2)
 }
 
+func searchInsert(nums []int, target int) int { // 35. 搜索插入位置 数组排序好
+	var index int // 返回索引
+	for k, v := range nums {
+		if k == 0 && target < nums[k] {
+			index = 0
+			break
+		} else if k == len(nums)-1 && target > nums[k] { // 最后一个元素
+			index = len(nums)
+			break
+		} else if v < target && nums[k+1] > target { // 插入
+			index = k + 1
+			break
+		} else if v == target { // 查找到target存在数组内
+			index = k
+			break
+		}
+	}
+	return index
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -195,4 +215,10 @@ func main() {
 	// k1 := average(salary1)
 	// k2 := average(salary2)
 	// log.Println(k1, k2)
+
+	// // 搜索插入位置
+	// nums := []int{1}
+	// target := 1
+	// k := searchInsert(nums, target)
+	// log.Println(k)
 }
