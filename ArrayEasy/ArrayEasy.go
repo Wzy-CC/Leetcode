@@ -133,6 +133,22 @@ func countCharacters(words []string, chars string) int { // 1106 拼写单词
 	return length
 }
 
+func average(salary []int) float64 { // 1491. 去掉最低工资和最高工资后的工资平均值
+	var maxs = salary[0] // 最低工资
+	var mins = salary[0] // 最高工资
+	var sum = 0          // 工资之和
+	for _, v := range salary {
+		if v > maxs {
+			maxs = v
+		}
+		if v < mins {
+			mins = v
+		}
+		sum += v
+	}
+	return float64(sum-maxs-mins) / float64(len(salary)-2)
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -171,5 +187,12 @@ func main() {
 
 	// k1 := countCharacters(words1, chars1)
 	// k2 := countCharacters(words2, chars2)
+	// log.Println(k1, k2)
+
+	// // 去掉最低工资和最高工资后的工资平均值
+	// salary1 := []int{8000, 9000, 2000, 3003, 6000, 1000}
+	// salary2 := []int{6000, 5000, 4000, 3000, 2000, 1000}
+	// k1 := average(salary1)
+	// k2 := average(salary2)
 	// log.Println(k1, k2)
 }
