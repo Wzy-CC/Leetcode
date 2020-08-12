@@ -168,7 +168,24 @@ func merge(intervals [][]int) [][]int { // 56. Merge Intervals 合并区间
 }
 
 func movesToMakeZigzag(nums []int) int { // 1144. 递减元素使数组呈锯齿状
+	var diffs []int // 差值数组
+	var oddOpe = 0  // 计算对奇数索引操作的次数
+	var ovenOpe = 0 // 计算对偶数索引操作的次数
 
+	for i := 1; i < len(nums); i++ { // 每次计算相邻两个数的差值 当前减去前一个数的差值
+		diff := nums[i] - nums[i-1]
+		diffs = append(diffs, diff)
+	}
+	for k, v := range diffs { // 遍历差值数组 +-+- 形式
+		if k%2 == 0 {
+
+		}
+
+	}
+	if oddOpe <= ovenOpe { // 返回最小值
+		return oddOpe
+	}
+	return ovenOpe
 }
 
 func main() {
@@ -194,9 +211,10 @@ func main() {
 	// k := merge(interval)
 	// log.Println(k)
 
-	// 1144. 递减元素使数组呈锯齿状
-	k := movesToMakeZigzag()
-	log.Println(k)
-
-	log.Println("l")
+	// 递减元素使数组呈锯齿状
+	nums1 := []int{9, 6, 1, 6, 2}
+	nums2 := []int{1, 2, 3}
+	k1 := movesToMakeZigzag(nums1)
+	k2 := movesToMakeZigzag(nums2)
+	log.Println(k1, k2)
 }

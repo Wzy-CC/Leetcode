@@ -187,6 +187,23 @@ func replaceElements(arr []int) []int { // 1299. 将每个元素替换为右侧�
 	return arr
 }
 
+func generate(numRows int) [][]int { // 给定一个非负整数 numRows，生成杨辉三角的前 numRows 行
+	var triangle [][]int
+	var lastRow []int // 上一排数组
+	for i := 1; i <= numRows; i++ {
+		var tempRow = make([]int, i) // 每一排
+		tempRow[0] = 1               // 第一个元素赋值
+		tempRow[i-1] = 1             // 最后一个元素赋值
+		for j := 1; j < i-1; j++ {   // 中间元素赋值
+			tempRow[j] = lastRow[j] + lastRow[j-1]
+		}
+		triangle = append(triangle, tempRow)
+		lastRow = make([]int, i)
+		_ = copy(lastRow, tempRow)
+	}
+	return triangle
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -240,8 +257,13 @@ func main() {
 	// k := searchInsert(nums, target)
 	// log.Println(k)
 
-	// 将每个元素替换为右侧最大元素
-	arr := []int{17, 18, 5, 4, 6, 1}
-	k := replaceElements(arr)
-	log.Println(k)
+	// // 将每个元素替换为右侧最大元素
+	// arr := []int{17, 18, 5, 4, 6, 1}
+	// k := replaceElements(arr)
+	// log.Println(k)
+
+	// // 杨辉三角
+	// numRows := 7
+	// k := generate(numRows)
+	// log.Println(k)
 }
