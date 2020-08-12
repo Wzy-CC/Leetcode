@@ -169,6 +169,24 @@ func searchInsert(nums []int, target int) int { // 35. 搜索插入位置 数组
 	return index
 }
 
+func replaceElements(arr []int) []int { // 1299. 将每个元素替换为右侧最大元素
+	for i := 0; i < len(arr); i++ { // 每次替换一个数字
+		var tempmax int      // 右侧最大数字
+		if i == len(arr)-1 { // 如果是最后一个数字
+			arr[i] = -1
+			break
+		}
+		tempmax = arr[i+1] // tempmax 值初始默认为i+1
+		for j := i + 1; j < len(arr); j++ {
+			if tempmax < arr[j] {
+				tempmax = arr[j]
+			}
+		}
+		arr[i] = tempmax
+	}
+	return arr
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -221,4 +239,9 @@ func main() {
 	// target := 1
 	// k := searchInsert(nums, target)
 	// log.Println(k)
+
+	// 将每个元素替换为右侧最大元素
+	arr := []int{17, 18, 5, 4, 6, 1}
+	k := replaceElements(arr)
+	log.Println(k)
 }
