@@ -220,6 +220,34 @@ func twoSum(numbers []int, target int) []int { // 167. 两数之和 II - 输入�
 	return results
 }
 
+func minTimeToVisitAllPoints(points [][]int) int { // 1266. 访问所有点的最小时间
+	var routeTime = 0
+	var tempTime int
+	var lastpoint = make([]int, 2) // 上一个节点
+	for k, point := range points { // 遍历节点
+		if k == 0 { // 第一个节点
+			_ = copy(lastpoint, point)
+		} else {
+			xmove := point[0] - lastpoint[0]
+			if xmove < 0 {
+				xmove = -xmove
+			}
+			ymove := point[1] - lastpoint[1]
+			if ymove < 0 {
+				ymove = -ymove
+			}
+			if diff := ymove - xmove; diff < 0 { // xmove比较大
+				tempTime = xmove
+			} else {
+				tempTime = ymove
+			}
+			routeTime += tempTime
+			_ = copy(lastpoint, point)
+		}
+	}
+	return routeTime
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -287,5 +315,10 @@ func main() {
 	// numbers := []int{2, 7, 11, 15}
 	// target := 9
 	// k := twoSum(numbers, target)
+	// log.Println(k)
+
+	// // 访问所有点的最小时间
+	// points := [][]int{{1, 1}, {3, 4}, {-1, 0}}
+	// k := minTimeToVisitAllPoints(points)
 	// log.Println(k)
 }
