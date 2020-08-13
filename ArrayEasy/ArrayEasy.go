@@ -248,6 +248,26 @@ func minTimeToVisitAllPoints(points [][]int) int { // 1266. 访问所有点的�
 	return routeTime
 }
 
+func numPairsDivisibleBy60(time []int) int { // 1010. 总持续时间可被 60 整除的歌曲 超长输入
+	// 本题容易做成O(N^2)的时间复杂度,时间复杂度为O(N)为正确做法
+	var songNum = 0 // 返回被60整除的歌曲数量
+	var hashMap = make(map[int]int)
+	for _, v := range time {
+		hashMap[v%60]++
+	}
+	for i := 1; i < 30; i++ { // 从索引1开始计算 额外关心歌曲时间长度是60倍数的时长和余数为30的时长
+		multip := hashMap[i] * hashMap[60-i]
+		songNum = songNum + multip
+	}
+	for i := 0; i < hashMap[0]; i++ { // 额外计算0
+		songNum = songNum + i
+	}
+	for i := 0; i < hashMap[30]; i++ { // 额外计算30
+		songNum = songNum + i
+	}
+	return songNum
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -320,5 +340,10 @@ func main() {
 	// // 访问所有点的最小时间
 	// points := [][]int{{1, 1}, {3, 4}, {-1, 0}}
 	// k := minTimeToVisitAllPoints(points)
+	// log.Println(k)
+
+	// // 1010. 总持续时间可被 60 整除的歌曲
+	// time := []int{30, 20, 150, 100, 40}
+	// k := numPairsDivisibleBy60(time)
 	// log.Println(k)
 }
