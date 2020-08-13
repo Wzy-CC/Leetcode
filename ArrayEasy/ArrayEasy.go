@@ -204,6 +204,22 @@ func generate(numRows int) [][]int { // 给定一个非负整数 numRows，生�
 	return triangle
 }
 
+func twoSum(numbers []int, target int) []int { // 167. 两数之和 II - 输入有序数组
+	var results = make([]int, 2) // 返回结果
+	for i := 0; i < len(numbers); i++ {
+		for j := i + 1; j < len(numbers); j++ {
+			if numbers[i]+numbers[j] > target { // 已经超过了
+				break
+			} else if numbers[i]+numbers[j] == target { // 返回结果
+				results[0] = i + 1
+				results[1] = j + 1
+				break
+			}
+		}
+	}
+	return results
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -265,5 +281,11 @@ func main() {
 	// // 杨辉三角
 	// numRows := 7
 	// k := generate(numRows)
+	// log.Println(k)
+
+	// // 两数之和 II
+	// numbers := []int{2, 7, 11, 15}
+	// target := 9
+	// k := twoSum(numbers, target)
 	// log.Println(k)
 }
