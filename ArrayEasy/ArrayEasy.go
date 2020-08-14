@@ -268,6 +268,20 @@ func numPairsDivisibleBy60(time []int) int { // 1010. 总持续时间可被 60 �
 	return songNum
 }
 
+func duplicateZeros(arr []int) { // 1089. 复写零
+	var temparr []int       // 临时切片用于复制
+	for _, v := range arr { // 遍历找0
+		if v == 0 {
+			temparr = append(temparr, v)
+			temparr = append(temparr, 0)
+		} else {
+			temparr = append(temparr, v)
+		}
+	}
+	copy(arr, temparr)
+	// arr = temparr[:] // 截断赋值不行，slice知识点详情见https://juejin.im/user/1292681406870013
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -346,4 +360,9 @@ func main() {
 	// time := []int{30, 20, 150, 100, 40}
 	// k := numPairsDivisibleBy60(time)
 	// log.Println(k)
+
+	// // 复写零
+	// arr := []int{1, 0, 2, 3, 0, 4, 5, 0}
+	// duplicateZeros(arr)
+	// log.Println(arr)
 }
