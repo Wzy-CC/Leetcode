@@ -282,6 +282,19 @@ func duplicateZeros(arr []int) { // 1089. 复写零
 	// arr = temparr[:] // 截断赋值不行，slice知识点详情见https://juejin.im/user/1292681406870013
 }
 
+func countNegatives(grid [][]int) int { // 1351. 统计有序矩阵中的负数
+	// 数组为非递增序列 统计负数的数目
+	var minus = 0 // 负数个数
+	for _, v := range grid {
+		for _, num := range v {
+			if num < 0 {
+				minus++
+			}
+		}
+	}
+	return minus
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -365,4 +378,9 @@ func main() {
 	// arr := []int{1, 0, 2, 3, 0, 4, 5, 0}
 	// duplicateZeros(arr)
 	// log.Println(arr)
+
+	// // 统计有序矩阵中负数的个数
+	// grid := [][]int{{4, 3, 2, -1}, {3, 2, 1, -1}, {1, 1, -1, -2}, {-1, -1, -2, -3}}
+	// k := countNegatives(grid)
+	// log.Println(k)
 }
