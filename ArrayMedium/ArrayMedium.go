@@ -78,59 +78,6 @@ func tictactoe(board []string) string { // 面试题16.04 井字游戏
 	}
 }
 
-func merge1(intervals [][]int) [][]int { // 56. Merge Intervals 合并区间
-	var results [][]int // 返回结果
-	var m map[int]int   // key int值 value 有效位标识是否为边界数字 1:右边界数字 0:非边界数字 -1:左边界数字
-	m = make(map[int]int)
-	// step1:区间去重
-	for _, interval := range intervals { // 遍历外层
-		for i := interval[0]; i <= interval[1]; i++ { // 向map添加元素
-			if i == interval[0] {
-				m[i] = -1
-			} else if i == interval[1] {
-				m[i] = 1
-			} else {
-				m[i] = 0
-			}
-		}
-	}
-	// step2:排序
-	var intervalSortSet []int
-	for k, _ := range m {
-		intervalSortSet = append(intervalSortSet, k)
-	}
-	for i := 0; i < len(intervalSortSet); i++ { // 冒泡排序
-		for j := 0; j < len(intervalSortSet)-i-1; j++ {
-			if intervalSortSet[j] > intervalSortSet[j+1] {
-				intervalSortSet[j], intervalSortSet[j+1] = intervalSortSet[j+1], intervalSortSet[j]
-			}
-		}
-	}
-	// step3:隔断区间
-	var startindex int // 区间起始
-	var endindex int   // 区间终止
-	startindex = 0
-	for k, v := range intervalSortSet {
-		if k == len(intervalSortSet)-1 { // k是最后一个数
-			endindex = k
-			var tempinterval = make([]int, 2)
-			tempinterval[0] = intervalSortSet[startindex]
-			tempinterval[1] = intervalSortSet[endindex]
-			results = append(results, tempinterval[:]) // 区间添加 重新开始计算间隔
-		} else {
-			if (m[v] == -1 && m[intervalSortSet[k+1]] == 1 && v == intervalSortSet[k+1]-1) || v != intervalSortSet[k+1]-1 { // 如果当前跳动范围大于1 或者连续但是当前为左边界 下一个为右边界 隔断产生
-				endindex = k
-				var tempinterval = make([]int, 2)
-				tempinterval[0] = intervalSortSet[startindex]
-				tempinterval[1] = intervalSortSet[endindex]
-				results = append(results, tempinterval) // 区间添加 重新开始计算间隔
-				startindex = k + 1
-			}
-		}
-	}
-	return results
-}
-
 func merge(intervals [][]int) [][]int { // 56. Merge Intervals 合并区间
 	if len(intervals) == 0 {
 		return [][]int{}
@@ -167,25 +114,41 @@ func merge(intervals [][]int) [][]int { // 56. Merge Intervals 合并区间
 	return results
 }
 
-func movesToMakeZigzag(nums []int) int { // 1144. 递减元素使数组呈锯齿状
-	var diffs []int // 差值数组
-	var oddOpe = 0  // 计算对奇数索引操作的次数
-	var ovenOpe = 0 // 计算对偶数索引操作的次数
+// // ?
+// func movesToMakeZigzag(nums []int) int { // 1144. 递减元素使数组呈锯齿状
+// 	var diffs []int // 差值数组
+// 	var oddOpe = 0  // 计算对奇数索引操作的次数
+// 	var ovenOpe = 0 // 计算对偶数索引操作的次数
 
-	for i := 1; i < len(nums); i++ { // 每次计算相邻两个数的差值 当前减去前一个数的差值
-		diff := nums[i] - nums[i-1]
-		diffs = append(diffs, diff)
+// 	for i := 1; i < len(nums); i++ { // 每次计算相邻两个数的差值 当前减去前一个数的差值
+// 		diff := nums[i] - nums[i-1]
+// 		diffs = append(diffs, diff)
+// 	}
+// 	for k, v := range diffs { // 遍历差值数组 +-+- 形式
+// 		if k%2 == 0 {
+
+// 		}
+
+// 	}
+// 	if oddOpe <= ovenOpe { // 返回最小值
+// 		return oddOpe
+// 	}
+// 	return ovenOpe
+// }
+
+func rotate(matrix [][]int) { // 面试题 旋转矩阵
+	var tempMatrix = make([][]int, len(matrix)) // 行 空间申请
+	for i := 0; i < len(matrix); i++ {
+		tempMatrix[i] = make([]int, len(matrix)) // 列 空间申请
 	}
-	for k, v := range diffs { // 遍历差值数组 +-+- 形式
-		if k%2 == 0 {
 
+	// 赋值到tempMetrix
+	for rowindex, row := range matrix {
+		for colindex, col := range row {
+			tempMatrix[colindex][len(matrix)-rowindex-1] = col
 		}
-
 	}
-	if oddOpe <= ovenOpe { // 返回最小值
-		return oddOpe
-	}
-	return ovenOpe
+	copy(matrix, tempMatrix) // 赋值
 }
 
 func main() {
@@ -211,10 +174,15 @@ func main() {
 	// k := merge(interval)
 	// log.Println(k)
 
-	// 递减元素使数组呈锯齿状
-	nums1 := []int{9, 6, 1, 6, 2}
-	nums2 := []int{1, 2, 3}
-	k1 := movesToMakeZigzag(nums1)
-	k2 := movesToMakeZigzag(nums2)
-	log.Println(k1, k2)
+	// // 递减元素使数组呈锯齿状
+	// nums1 := []int{9, 6, 1, 6, 2}
+	// nums2 := []int{1, 2, 3}
+	// k1 := movesToMakeZigzag(nums1)
+	// k2 := movesToMakeZigzag(nums2)
+	// log.Println(k1, k2)
+
+	// // 旋转矩阵
+	// matrix := [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
+	// rotate(matrix)
+	// log.Println(matrix)
 }
