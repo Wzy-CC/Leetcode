@@ -321,12 +321,40 @@ func maxSubArray(nums []int) int { // 面试题16.17 连续数列
 	return sum
 }
 
-// func canPlaceFlowers(flowerbed []int, n int) bool { // 605. 种花问题
-// 	// 每三个格子可以种植一只花 滑动窗口
-// 	for k, v := range flowerbed { // 最右最左检查两个格子
-// 		saf
-// 	}
-// }
+func canPlaceFlowers(flowerbed []int, n int) bool { // 605. 种花问题
+	switch len(flowerbed) { // 数组长度小于2的情况
+	case 0:
+		return false
+	case 1:
+		if flowerbed[0] == 0 {
+			flowerbed[0] = 1
+			n--
+		}
+	}
+
+	for i := 0; i < len(flowerbed); i++ { // 如果这个格子的后面是空的，且前面的格子也是空的，则插入
+		if flowerbed[i] == 0 { // 当前格子为空
+			if i == 0 { // 左边界判断
+				if flowerbed[i+1] == 0 {
+					flowerbed[i] = 1
+					n--
+				}
+			} else if i == len(flowerbed)-1 { // 右边界判断
+				if flowerbed[i-1] == 0 {
+					flowerbed[i] = 1
+					n--
+				}
+			} else if flowerbed[i-1] == 0 && flowerbed[i+1] == 0 {
+				flowerbed[i] = 1
+				n--
+			}
+		}
+	}
+	if n <= 0 {
+		return true
+	}
+	return false
+}
 
 func main() {
 	log.Println("ArrayEasy")
@@ -417,10 +445,10 @@ func main() {
 	// k := countNegatives(grid)
 	// log.Println(k)
 
-	// 连续数列
-	array := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
-	k := maxSubArray(array)
-	log.Println(k)
+	// // 连续数列
+	// array := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
+	// k := maxSubArray(array)
+	// log.Println(k)
 
 	// // 种花问题
 	// flowerbed := []int{1, 0, 0, 0, 1}
