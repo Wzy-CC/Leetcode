@@ -295,6 +295,39 @@ func countNegatives(grid [][]int) int { // 1351. 统计有序矩阵中的负数
 	return minus
 }
 
+func maxSubArray(nums []int) int { // 面试题16.17 连续数列
+	// 动态规划 dp[i] = max(dp[i-1]+nums[i],nums[i])
+	// dp[i]代表以索引i为结尾的[0:i]之间的最大连续子序列之和
+	// 很多题解没有考虑到若数组中全为负数的情况，本解时间复杂度为O(n)
+	// 不会更为精妙的分治法求解。
+
+	max := func(a, b int) int { // 自定义max函数
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	var dp = make([]int, len(nums)) // dp数组存储dp[i]
+	dp[0] = nums[0]                 // dp[0] 初始值
+	sum := dp[0]                    // 最后结果
+
+	for i := 1; i < len(nums); i++ { // dp[1]开始计算
+		dp[i] = max(dp[i-1]+nums[i], nums[i])
+		if dp[i] > sum {
+			sum = dp[i]
+		}
+	}
+	return sum
+}
+
+// func canPlaceFlowers(flowerbed []int, n int) bool { // 605. 种花问题
+// 	// 每三个格子可以种植一只花 滑动窗口
+// 	for k, v := range flowerbed { // 最右最左检查两个格子
+// 		saf
+// 	}
+// }
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -382,5 +415,16 @@ func main() {
 	// // 统计有序矩阵中负数的个数
 	// grid := [][]int{{4, 3, 2, -1}, {3, 2, 1, -1}, {1, 1, -1, -2}, {-1, -1, -2, -3}}
 	// k := countNegatives(grid)
+	// log.Println(k)
+
+	// 连续数列
+	array := []int{-2, 1, -3, 4, -1, 2, 1, -5, 4}
+	k := maxSubArray(array)
+	log.Println(k)
+
+	// // 种花问题
+	// flowerbed := []int{1, 0, 0, 0, 1}
+	// n := 1
+	// k := canPlaceFlowers(flowerbed, n)
 	// log.Println(k)
 }
