@@ -377,6 +377,25 @@ func maxProfit(prices []int) int { // 121. 买卖股票的最佳时机
 	return 0
 }
 
+func majorityElement(nums []int) int { // 面试题 17.10. 主要元素
+	// 时间复杂度O(n),空间复杂度O(1)完成:摩尔投票法
+	// 摩尔投票法:需要确定给定数组中确实存在主要元素，否则结果无意义
+	// 随机验证法:思路比较有趣
+	var count = 0
+	var major int
+	for _, v := range nums {
+		if count == 0 {
+			major = v
+		}
+		if v != major {
+			count--
+		} else {
+			count++
+		}
+	}
+	return major
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -480,4 +499,8 @@ func main() {
 	// // 买卖股票的最佳时机
 	// prices := []int{7, 1, 5, 3, 6, 4}
 	// log.Println(maxProfit(prices))
+
+	// // 主要元素
+	// array := []int{1, 2, 5, 9, 5, 9, 5, 5, 5}
+	// log.Println(majorityElement(array))
 }
