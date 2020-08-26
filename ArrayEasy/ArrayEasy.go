@@ -356,6 +356,27 @@ func canPlaceFlowers(flowerbed []int, n int) bool { // 605. 种花问题
 	return false
 }
 
+func maxProfit(prices []int) int { // 121. 买卖股票的最佳时机
+	// 动态规划实现(也可以使用单调栈)
+	if len(prices) == 0 {
+		return 0
+	}
+	var min = prices[0] // 维护i日前的最低点 初始值设置为第一天价格
+	var profit = 0      // 差价
+	for _, v := range prices {
+		if profit < v-min {
+			profit = v - min
+		}
+		if min > v {
+			min = v
+		}
+	}
+	if profit > 0 {
+		return profit
+	}
+	return 0
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -455,4 +476,8 @@ func main() {
 	// n := 1
 	// k := canPlaceFlowers(flowerbed, n)
 	// log.Println(k)
+
+	// // 买卖股票的最佳时机
+	// prices := []int{7, 1, 5, 3, 6, 4}
+	// log.Println(maxProfit(prices))
 }
