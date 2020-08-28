@@ -1,6 +1,8 @@
 package main
 
-import "log"
+import (
+	"log"
+)
 
 func numOfSubarrays(arr []int, k int, threshold int) int { // 1343 大小为k平均值大于阈值的子数组数目 子数组连续
 	var count = 0            // 起始个数为0个
@@ -151,6 +153,33 @@ func rotate(matrix [][]int) { // 面试题 旋转矩阵
 	copy(matrix, tempMatrix) // 赋值
 }
 
+func getWinner(arr []int, k int) int { // 1535. 找出数组游戏的赢家
+	// 数组本身由不同元素组成
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+	var wincount = 0 // 赢回合数
+	var preIndex = 0 // 维护一个指针指向当前元素
+	for {
+		preIndex++
+		// 每次比较preIndex和0号元素的值
+		if arr[0] > arr[preIndex] { // 0号元素大
+			wincount++
+		} else { // 当前元素大
+			arr[0] = arr[preIndex] // 赋值到第一个元素
+			wincount = 1
+		}
+
+		if (wincount == min(k, len(arr))) || preIndex == len(arr)-1 {
+			break
+		}
+	}
+	return arr[0]
+}
+
 func main() {
 	log.Println("ArrayMedium")
 
@@ -185,4 +214,9 @@ func main() {
 	// matrix := [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
 	// rotate(matrix)
 	// log.Println(matrix)
+
+	// // 找出数组游戏的赢家
+	// arr := []int{2, 1, 3, 5, 4, 6, 7}
+	// k := 2
+	// log.Println(getWinner(arr, k))
 }
