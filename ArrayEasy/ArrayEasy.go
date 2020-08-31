@@ -1,6 +1,9 @@
 package main
 
-import "log"
+import (
+	"log"
+	"sort"
+)
 
 func heightChecker(heights []int) int { // 高度检查器
 	var heightsclone = make([]int, len(heights[:])) // 克隆原数组
@@ -396,6 +399,14 @@ func majorityElement(nums []int) int { // 面试题 17.10. 主要元素
 	return major
 }
 
+func sortedSquares(A []int) []int { // 977. 有序数组的平方
+	for k, v := range A {
+		A[k] = v * v
+	}
+	sort.Ints(A)
+	return A
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -503,4 +514,8 @@ func main() {
 	// // 主要元素
 	// array := []int{1, 2, 5, 9, 5, 9, 5, 5, 5}
 	// log.Println(majorityElement(array))
+
+	// // 有序数组的平方
+	// arr := []int{-4, -1, 0, 3, 10}
+	// log.Println(sortedSquares(arr))
 }
