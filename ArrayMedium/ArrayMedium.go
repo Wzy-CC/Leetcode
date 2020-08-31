@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"sort"
 )
 
 func numOfSubarrays(arr []int, k int, threshold int) int { // 1343 大小为k平均值大于阈值的子数组数目 子数组连续
@@ -180,6 +181,64 @@ func getWinner(arr []int, k int) int { // 1535. 找出数组游戏的赢家
 	return arr[0]
 }
 
+func maxDistance(position []int, m int) int { // 1552. 两球之间的磁力
+	// 返回是否满足可以按照pred放入小球:贪心算法
+	IfSatisfy := func(p []int, m int, pred int) bool {
+		var lastindex = 0                    // 记录上一个放置小球的位置
+		for i := 0; i < len(position); i++ { // 遍历position数组
+			if i == 0 {
+				m--
+				lastindex = i
+			}
+			if p[lastindex]+pred <= p[i] { // 判断数组位置是否可以放置小球:可以放置
+				m--
+				lastindex = i
+			}
+		}
+		if m > 0 { // 放置到最后一个位置还是有剩余，不行
+			return false
+		}
+		return true
+	}
+
+	// 思路：先排序，理想情况为直接放置在等分索引处
+	// for i := 0; i < len(position)-1; i++ { // 冒泡排序
+	// 	for j := 0; j < len(position)-i-1; j++ {
+	// 		if position[j] > position[j+1] {
+	// 			position[j], position[j+1] = position[j+1], position[j]
+	// 		}
+	// 	}
+	// }
+	sort.Ints(position) // 注释:此处冒泡过不了
+	// 计算理论上的最大化的最小距离:向零取整
+	WishDistance := (position[len(position)-1] - position[0]) / (m - 1)
+	// 二分查找，使用贪心算法分配小球位置
+	var mindistance = 1            // 最小值从1计算起
+	var maxdistance = WishDistance // 最大值从WishDistance起
+	for {
+		if mindistance == maxdistance {
+			return 1
+		}
+		pred := (mindistance + maxdistance) / 2 // 二分查找当前的位置
+		// 按照pred分配小球位置
+		ifsatisfy := IfSatisfy(position, m, pred)
+		if ifsatisfy { // 如果当前距离满足要求，左边界更新
+			mindistance = pred
+		} else { // 如果当前距离不满足要求，右边界更新
+			maxdistance = pred
+		}
+		if mindistance == maxdistance-1 { // 终止条件:当min和max相差1
+			if IfSatisfy(position, m, mindistance) && !IfSatisfy(position, m, maxdistance) { // 且 min符合要求 max不符合要求时
+				return mindistance
+			} else if IfSatisfy(position, m, mindistance) && IfSatisfy(position, m, maxdistance) { // 且 min符合要求 max符合要求时
+				return maxdistance
+			}
+			break
+		}
+	}
+	return 1
+}
+
 func main() {
 	log.Println("ArrayMedium")
 
@@ -219,4 +278,13 @@ func main() {
 	// arr := []int{2, 1, 3, 5, 4, 6, 7}
 	// k := 2
 	// log.Println(getWinner(arr, k))
+
+	// // 两球之间的磁力
+	// position1 := []int{52, 63, 51, 8, 85, 27, 38, 30, 90, 66, 60, 6, 61, 72, 3, 81, 1, 21, 55, 13, 78, 94, 31, 96, 33, 40, 56, 77, 15, 79, 93, 82, 35, 2, 98, 28, 70, 5, 9, 88, 83, 14, 39, 54, 65, 74, 10, 48, 84, 92, 53, 71, 36, 20, 97, 25, 59, 50, 22, 12, 16, 11, 89, 86, 64}
+	// m1 := 65
+	// log.Println(maxDistance(position1, m1))
+
+	// position2 := []int{1, 2, 3, 4, 7}
+	// m2 := 3
+	// log.Println(maxDistance(position2, m2))
 }
