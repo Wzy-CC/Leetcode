@@ -407,6 +407,25 @@ func sortedSquares(A []int) []int { // 977. 有序数组的平方
 	return A
 }
 
+func maximumProduct(nums []int) int { // 628. 三个数的最大乘积
+	max := func(a ...int) int {
+		var m = a[0]
+		for _, v := range a {
+			if v > m {
+				m = v
+			}
+		}
+		return m
+	}
+	sort.Ints(nums)
+	// 情况1:正数、正数、正数
+	// 情况2:负数、正数、正数
+	// 情况3:负数、负数、正数
+	// 情况4:负数、负数、负数
+	// 情况5:含有0的情况
+	return max(nums[len(nums)-1]*nums[len(nums)-2]*nums[len(nums)-3], nums[0]*nums[1]*nums[len(nums)-1])
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -518,4 +537,8 @@ func main() {
 	// // 有序数组的平方
 	// arr := []int{-4, -1, 0, 3, 10}
 	// log.Println(sortedSquares(arr))
+
+	// // 三个数的最大乘积
+	// arr := []int{1, 2, 3, 4}
+	// log.Println(maximumProduct(arr))
 }
