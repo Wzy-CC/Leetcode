@@ -426,6 +426,26 @@ func maximumProduct(nums []int) int { // 628. 三个数的最大乘积
 	return max(nums[len(nums)-1]*nums[len(nums)-2]*nums[len(nums)-3], nums[0]*nums[1]*nums[len(nums)-1])
 }
 
+func transpose(A [][]int) [][]int { // 867. 转置矩阵
+	if len(A) == 0 {
+		return A
+	}
+
+	rlength := len(A)                // 转置矩阵的长
+	rwidth := len(A[0])              // 转置矩阵的宽
+	results := make([][]int, rwidth) // 返回转置矩阵
+	for i := 0; i < rwidth; i++ {    // 分配二维矩阵空间
+		results[i] = make([]int, rlength)
+	}
+
+	for r, row := range A { // 遍历当前矩阵
+		for c, _ := range row {
+			results[c][r] = A[r][c]
+		}
+	}
+	return results
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -541,4 +561,9 @@ func main() {
 	// // 三个数的最大乘积
 	// arr := []int{1, 2, 3, 4}
 	// log.Println(maximumProduct(arr))
+
+	// // 转置矩阵
+	// matrix := [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
+	// matrix = [][]int{{1, 2, 3}, {4, 5, 6}}
+	// log.Println(transpose(matrix))
 }
