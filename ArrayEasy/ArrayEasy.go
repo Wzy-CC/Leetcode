@@ -446,6 +446,21 @@ func transpose(A [][]int) [][]int { // 867. 转置矩阵
 	return results
 }
 
+func threeConsecutiveOdds(arr []int) bool { // 1550. 存在连续三个奇数的数组
+	var Oddcount = 0 // 记录连续奇数的个数
+	for _, v := range arr {
+		if v%2 == 0 { // 如果遇到偶数 置零
+			Oddcount = 0
+		} else {
+			Oddcount++
+		}
+		if Oddcount == 3 {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -566,4 +581,8 @@ func main() {
 	// matrix := [][]int{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
 	// matrix = [][]int{{1, 2, 3}, {4, 5, 6}}
 	// log.Println(transpose(matrix))
+
+	// // 存在连续三个奇数
+	// array := []int{1, 2, 34, 3, 4, 5, 7, 23, 12}
+	// log.Println(threeConsecutiveOdds(array))
 }
