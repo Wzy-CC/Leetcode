@@ -239,6 +239,31 @@ func maxDistance(position []int, m int) int { // 1552. 两球之间的磁力
 	return 1
 }
 
+func minimumTotal(triangle [][]int) int { // 120. 三角形最小路径和
+	// 动态规划: 降维 原地替换
+	min := func(i ...int) int { // 定义min函数
+		var m = i[0] // 初始化为第一个元素
+		for _, v := range i {
+			if v < m {
+				m = v
+			}
+		}
+		return m
+	}
+
+	var prerow = len(triangle) - 1 // 初始状态从最后一行遍历开始
+	for {
+		if prerow == 0 { // 如果当前行数为0
+			return triangle[0][0] // 返回第一个元素
+		}
+		for i := 0; i < prerow; i++ { // 遍历prerow上一行
+			triangle[prerow-1][i] = min((triangle[prerow-1][i] + triangle[prerow][i]), (triangle[prerow-1][i] + triangle[prerow][i+1])) // 替换
+		}
+		prerow = prerow - 1
+		log.Println(triangle)
+	}
+}
+
 func main() {
 	log.Println("ArrayMedium")
 
@@ -287,4 +312,13 @@ func main() {
 	// position2 := []int{1, 2, 3, 4, 7}
 	// m2 := 3
 	// log.Println(maxDistance(position2, m2))
+
+	// // 三角形最小路径和
+	// triangle := [][]int{
+	// 	{2},
+	// 	{3, 4},
+	// 	{6, 5, 7},
+	// 	{4, 1, 8, 3},
+	// }
+	// log.Println(minimumTotal(triangle))
 }
