@@ -461,6 +461,23 @@ func threeConsecutiveOdds(arr []int) bool { // 1550. 存在连续三个奇数的
 	return false
 }
 
+func containsNearbyDuplicate(nums []int, k int) bool { // 219. 存在重复元素 II
+	// 寻找 nums[i] = nums[j] 且 j i 差的绝对值至多为k
+	// 遍历存储到哈希表，若不满足则更新哈希表中值
+	var m = make(map[int]int) // 存储索引位置
+
+	for in, v := range nums { // 遍历数组
+		if _, ok := m[v]; ok { // 如果键值存在于map中
+			// 比较是否和当前值差值小于等于k
+			if in-m[v] <= k {
+				return true
+			}
+		}
+		m[v] = in // 记录位置
+	}
+	return false
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -585,4 +602,8 @@ func main() {
 	// // 存在连续三个奇数
 	// array := []int{1, 2, 34, 3, 4, 5, 7, 23, 12}
 	// log.Println(threeConsecutiveOdds(array))
+
+	// // 存在重复元素2
+	// nums := []int{1, 2, 3, 1, 2, 3}
+	// log.Println(containsNearbyDuplicate(nums, 2))
 }
