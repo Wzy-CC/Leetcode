@@ -478,6 +478,16 @@ func containsNearbyDuplicate(nums []int, k int) bool { // 219. 存在重复元�
 	return false
 }
 
+func flipAndInvertImage(A [][]int) [][]int { // 832. 翻转图像
+	// 逆序存储
+	for r, row := range A {
+		for i := 0; i < (len(row)+1)/2; i++ {
+			A[r][i], A[r][len(row)-i-1] = (1 - A[r][len(row)-i-1]), (1 - A[r][i]) // 反转图像
+		}
+	}
+	return A
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -606,4 +616,8 @@ func main() {
 	// // 存在重复元素2
 	// nums := []int{1, 2, 3, 1, 2, 3}
 	// log.Println(containsNearbyDuplicate(nums, 2))
+
+	// // 反转图像
+	// pic := [][]int{{1, 1, 0}, {1, 0, 1}, {0, 0, 0}}
+	// log.Println(flipAndInvertImage(pic))
 }
