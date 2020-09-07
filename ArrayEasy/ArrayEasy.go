@@ -488,6 +488,52 @@ func flipAndInvertImage(A [][]int) [][]int { // 832. 翻转图像
 	return A
 }
 
+func numMagicSquaresInside(grid [][]int) int { // 840. 矩阵中的幻方
+	var AllSquares = 0 // 总共满足条件的矩阵数
+	check := func(row, col int, g [][]int) bool {
+		if row == 0 || row == len(grid)-1 || col == 0 || col == len(g[0])-1 { // 如果5在边界上不满足要求
+			return false
+		}
+		// 检查数字是否从1-9
+		hashMap := make(map[int]int)        // hashmap records number exist
+		for r := row - 1; r <= row+1; r++ { // 遍历行
+			for c := col - 1; c <= col+1; c++ { // 遍历列
+				if _, ok := hashMap[g[r][c]]; !ok { // 如果哈希表中不存在值
+					hashMap[g[r][c]] = 1
+				} else {
+					hashMap[g[r][c]]++
+				}
+				// 检查hash表是否满足要求:1-9出现且只能出现一次
+				if hashMap[g[r][c]] > 1 {
+					return false
+				}
+				if (g[r][c] > 9) || (g[r][c] < 1) {
+					return false
+				}
+			}
+		}
+		if (g[row-1][col-1]+g[row-1][col]+g[row-1][col+1] == 15) && (g[row][col-1]+g[row][col]+g[row][col+1] == 15) && (g[row+1][col-1]+g[row+1][col]+g[row+1][col+1] == 15) { // if row sum is 15
+			if (g[row-1][col-1]+g[row][col-1]+g[row+1][col-1] == 15) && (g[row-1][col]+g[row][col]+g[row+1][col] == 15) && (g[row-1][col+1]+g[row][col+1]+g[row+1][col+1] == 15) { // if col sum is 15
+				if (g[row-1][col-1]+g[row][col]+g[row+1][col+1] == 15) && (g[row-1][col+1]+g[row][col]+g[row+1][col-1] == 15) { // if diagonal sum is 15
+					return true
+				}
+			}
+		} // 判断三个数字之和
+		return false
+	}
+	// 在整个矩阵中寻找5
+	for r, row := range grid {
+		for k, v := range row {
+			if v == 5 { // 寻找到5
+				if check(r, k, grid) { // 检查以(r,k)为中心的矩阵是否符合要求
+					AllSquares++
+				}
+			}
+		}
+	}
+	return AllSquares
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -617,7 +663,21 @@ func main() {
 	// nums := []int{1, 2, 3, 1, 2, 3}
 	// log.Println(containsNearbyDuplicate(nums, 2))
 
-	// // 反转图像
+	// // 翻转图像
 	// pic := [][]int{{1, 1, 0}, {1, 0, 1}, {0, 0, 0}}
 	// log.Println(flipAndInvertImage(pic))
+
+	// // 矩阵中的幻方
+	// matrix1 := [][]int{
+	// 	{4, 3, 8, 4},
+	// 	{9, 5, 1, 9},
+	// 	{2, 7, 6, 2},
+	// }
+	// matrix2 := [][]int{
+	// 	{5, 5, 5},
+	// 	{5, 5, 5},
+	// 	{5, 5, 5},
+	// }
+	// log.Println(numMagicSquaresInside(matrix1))
+	// log.Println(numMagicSquaresInside(matrix2))
 }
