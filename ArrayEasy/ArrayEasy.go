@@ -534,6 +534,27 @@ func numMagicSquaresInside(grid [][]int) int { // 840. 矩阵中的幻方
 	return AllSquares
 }
 
+func countGoodTriplets(arr []int, a int, b int, c int) int { // 1534. 统计好三元组
+	// 思路暴力法 固定两个索引，遍历第三个索引
+	var count = 0               // 返回结果:三元组数量
+	abs := func(a, b int) int { // 计算绝对值
+		if a-b < 0 {
+			return b - a
+		}
+		return a - b
+	}
+	for i := 0; i < len(arr)-2; i++ { // 遍历至倒数第三个元素为止
+		for j := i + 1; j < len(arr)-1; j++ {
+			for k := j + 1; k < len(arr); k++ {
+				if (abs(arr[i], arr[j]) <= a) && (abs(arr[j], arr[k]) <= b) && (abs(arr[i], arr[k]) <= c) { // 如果满足条件
+					count++
+				}
+			}
+		}
+	}
+	return count
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -680,4 +701,8 @@ func main() {
 	// }
 	// log.Println(numMagicSquaresInside(matrix1))
 	// log.Println(numMagicSquaresInside(matrix2))
+
+	// // 统计好三元组
+	// arr := []int{3, 0, 1, 1, 9, 7}
+	// log.Println(countGoodTriplets(arr, 7, 2, 3))
 }
