@@ -555,6 +555,138 @@ func countGoodTriplets(arr []int, a int, b int, c int) int { // 1534. 统计好�
 	return count
 }
 
+func arrayRankTransform(arr []int) []int { // 1331. 数组序号转换
+	var arrclone = make([]int, len(arr)) // 数组拷贝
+	copy(arrclone, arr)                  //
+	var results []int                    // 返回结果
+	var seq = 1                          // 序号:结果从第一个开始
+	var resultsMap = make(map[int]int)   // 哈希表记录位置
+	sort.Ints(arr)
+	for _, v := range arr {
+		if _, ok := resultsMap[v]; ok { // 如果当前键在表中已经存在
+			continue // 跳过这次循环
+		}
+		resultsMap[v] = seq
+		seq++
+	}
+
+	for _, v := range arrclone {
+		results = append(results, resultsMap[v])
+	}
+	return results
+}
+
+func findNumberIn2DArray(matrix [][]int, target int) bool { // 剑指 Offer 04. 二维数组中的查找
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
+		return false
+	}
+	var row = 0                  // 起始坐标 行
+	var col = len(matrix[0]) - 1 // 起始坐标 列
+
+	for {
+		if row >= len(matrix) || col < 0 { // 终止条件:当到达边界时搜索停止
+			return false
+		}
+		if target < matrix[row][col] { // 小于当前数字，左移
+			col--
+			continue
+		} else if target > matrix[row][col] { // 大于当前数字，下移
+			row++
+			continue
+		} else {
+			return true
+		}
+	}
+}
+
+func shiftGrid(grid [][]int, k int) [][]int { // 1260. 二维网格迁移
+	// 思路:变换具有周期性，每n次每行下移一行，每n*m次变换至原位
+	if len(grid) == 0 || len(grid[0]) == 0 { // 如果行数或者列数为0
+		return grid
+	}
+	m := len(grid)    // 计算矩阵行数
+	n := len(grid[0]) // 计算矩阵列数
+	downOps := 0      // 计算下移次数
+
+	var tempgrid = make([][]int, len(grid)) // 为二维数组分配空间
+	for i := 0; i < len(grid); i++ {        // 为一维数组分配空间
+		tempgrid[i] = make([]int, len(grid[i]))
+	}
+
+	k = k % (n * m)           // 首先推断是否可以减少n*m
+	tempk := k                // 计算倍数
+	k = k % n                 // 再次推断是否可以减少n
+	downOps = (tempk - k) / n // 减去余数计算需要下移的次数
+	downOps = downOps % m     // 计算下移行数
+
+	log.Println(k)       // test code
+	log.Println(downOps) // test code
+
+	check := func(i int, m int) int { // 判断是否移动超过最后一行
+		if i >= m { // 如果超过
+			return i - m
+		}
+		return i
+	}
+
+	for r := 0; r < m; r++ { // 先进行下移操作:判断是否会超出行数
+		for c := 0; c < n; c++ {
+			tempgrid[check(r+downOps, m)][c] = grid[r][c]
+		}
+		// 注意这个地方不能是引用，必须是深拷贝
+	}
+	log.Println(tempgrid) // test code
+	if k == 0 {           // k为0时直接返回
+		copy(grid, tempgrid)
+	}
+	// log.Println(tempgrid) // test code
+
+	for {
+		if k == 0 { // k为0时退出循环
+			break
+		}
+		for r := 0; r < m; r++ { // 再进行每个元素转移操作 遍历每个元素
+			for c := 0; c < n; c++ {
+				if c+1 == n { // 如果超过列数下标
+					if r == m-1 { // 判断如果是最后一行
+						grid[0][0] = tempgrid[r][c]
+					} else { // 下移一行
+						grid[r+1][0] = tempgrid[r][c]
+					}
+				} else {
+					grid[r][c+1] = tempgrid[r][c]
+				}
+			}
+		}
+		// 一次变换结束后，需要将grid重新拷贝到temp中
+		copy(tempgrid, grid)
+		// log.Println(tempgrid)
+		k--
+	}
+	return grid
+}
+
+func moveZeroes(nums []int) { // 283. 移动零
+	// 要求 原地移动 操作次数少
+
+	// 思路1:零相当于空缺位置,移动后自动在后面填补0(开辟额外空间)
+	// 思路2:冒泡排序 交换到最后面位置 时间复杂度较高
+	// 思路3:快排
+	// 思路4:双指针
+
+	var preindex = 0         // 指向当前位置
+	for _, v := range nums { // 双指针
+		if v != 0 { // 如果不是0 立即写入当前位置
+			nums[preindex] = v
+			preindex++
+		}
+	}
+
+	for i := preindex; i < len(nums); i++ { // 将后续元素覆盖零
+		nums[i] = 0
+	}
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -705,4 +837,31 @@ func main() {
 	// // 统计好三元组
 	// arr := []int{3, 0, 1, 1, 9, 7}
 	// log.Println(countGoodTriplets(arr, 7, 2, 3))
+
+	// // 数组序号转换
+	// arr := []int{40, 10, 20, 30}
+	// log.Println(arrayRankTransform(arr))
+
+	// // 二维数组中的查找
+	// arr := [][]int{
+	// 	{1, 4, 7, 11, 15},
+	// 	{2, 5, 8, 12, 19},
+	// 	{3, 6, 9, 16, 22},
+	// 	{10, 13, 14, 17, 24},
+	// 	{18, 21, 23, 26, 30},
+	// }
+	// log.Println(findNumberIn2DArray(arr, 18))
+
+	// // 二维网格迁移
+	// grid := [][]int{
+	// 	{1, 2, 3},
+	// 	{4, 5, 6},
+	// 	{7, 8, 9},
+	// }
+	// log.Println(shiftGrid(grid, 101))
+
+	// 移动零
+	arr := []int{0, 1, 0, 3, 12}
+	moveZeroes(arr)
+	log.Println(arr)
 }
