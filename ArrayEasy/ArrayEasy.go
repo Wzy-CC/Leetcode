@@ -734,6 +734,38 @@ func dominantIndex(nums []int) int { // 747. 至少是其他数字两倍的最�
 	return -1
 }
 
+func matrixReshape(nums [][]int, r int, c int) [][]int { // 566. 重塑矩阵
+	if len(nums) == 0 || len(nums[0]) == 0 {
+		return nums
+	}
+
+	h := len(nums)    // 矩阵行数
+	l := len(nums[0]) // 矩阵列数
+
+	if h*l != r*c { // 判断元素个数是否相等
+		return nums
+	} else { // 矩阵可重塑
+		var numsReshape = make([][]int, r) // 为重塑后矩阵分配空间
+		for i := 0; i < r; i++ {
+			numsReshape[i] = make([]int, c)
+		}
+		var rcount = 0 // 计数器负责记录行数
+		var ccount = 0 // 计数器负责记录列数
+
+		for row := 0; row < h; row++ {
+			for col := 0; col < l; col++ {
+				numsReshape[rcount][ccount] = nums[row][col]
+				ccount++
+				if ccount == c { // 换行换列
+					ccount = ccount - c
+					rcount++
+				}
+			}
+		}
+		return numsReshape
+	}
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -920,7 +952,13 @@ func main() {
 	// }
 	// log.Println(isToeplitzMatrix(matrix))
 
-	// 至少是其他数字两倍的最大数
-	nums := []int{0, 0, 2, 3}
-	log.Println(dominantIndex(nums))
+	// // 至少是其他数字两倍的最大数
+	// nums := []int{0, 0, 2, 3}
+	// log.Println(dominantIndex(nums))
+
+	// // 重塑矩阵
+	// nums := [][]int{
+	// 	{1, 2, 3, 4},
+	// }
+	// log.Println(matrixReshape(nums, 2, 2))
 }
