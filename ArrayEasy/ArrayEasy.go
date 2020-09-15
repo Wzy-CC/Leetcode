@@ -601,6 +601,7 @@ func findNumberIn2DArray(matrix [][]int, target int) bool { // 剑指 Offer 04. 
 
 func shiftGrid(grid [][]int, k int) [][]int { // 1260. 二维网格迁移
 	// 思路:变换具有周期性，每n次每行下移一行，每n*m次变换至原位
+	// 注意:减少copy()函数的使用
 	if len(grid) == 0 || len(grid[0]) == 0 { // 如果行数或者列数为0
 		return grid
 	}
@@ -608,59 +609,47 @@ func shiftGrid(grid [][]int, k int) [][]int { // 1260. 二维网格迁移
 	n := len(grid[0]) // 计算矩阵列数
 	downOps := 0      // 计算下移次数
 
-	var tempgrid = make([][]int, len(grid)) // 为二维数组分配空间
-	for i := 0; i < len(grid); i++ {        // 为一维数组分配空间
-		tempgrid[i] = make([]int, len(grid[i]))
-	}
-
 	k = k % (n * m)           // 首先推断是否可以减少n*m
 	tempk := k                // 计算倍数
 	k = k % n                 // 再次推断是否可以减少n
 	downOps = (tempk - k) / n // 减去余数计算需要下移的次数
 	downOps = downOps % m     // 计算下移行数
 
-	log.Println(k)       // test code
-	log.Println(downOps) // test code
-
-	check := func(i int, m int) int { // 判断是否移动超过最后一行
-		if i >= m { // 如果超过
-			return i - m
-		}
-		return i
-	}
-
-	for r := 0; r < m; r++ { // 先进行下移操作:判断是否会超出行数
-		for c := 0; c < n; c++ {
-			tempgrid[check(r+downOps, m)][c] = grid[r][c]
-		}
-		// 注意这个地方不能是引用，必须是深拷贝
-	}
-	log.Println(tempgrid) // test code
-	if k == 0 {           // k为0时直接返回
-		copy(grid, tempgrid)
-	}
-	// log.Println(tempgrid) // test code
+	var extractrow = make([]int, len(grid[0])) // extract提取行
+	var nextrow = make([]int, len(grid[0]))    // next赋值行
 
 	for {
-		if k == 0 { // k为0时退出循环
+		nextrow = grid[m-1] // 初始化
+		if downOps == 0 {
+			break
+		}
+		for r := 0; r < m; r++ { // 先进行下移操作:判断是否会超出行数
+			extractrow = grid[r]
+			grid[r] = nextrow
+			nextrow = extractrow
+		}
+		downOps--
+	}
+
+	if k == 0 { // k为0时直接返回
+		return grid
+	}
+
+	// 新算法:原地赋值
+	for {
+		var extract int           // extract负责从矩阵中提取元素出来
+		var next = grid[m-1][n-1] // next负责将extract赋值给下一个元素 初始化:最后一个元素
+		if k == 0 {               // k为0时退出循环
 			break
 		}
 		for r := 0; r < m; r++ { // 再进行每个元素转移操作 遍历每个元素
 			for c := 0; c < n; c++ {
-				if c+1 == n { // 如果超过列数下标
-					if r == m-1 { // 判断如果是最后一行
-						grid[0][0] = tempgrid[r][c]
-					} else { // 下移一行
-						grid[r+1][0] = tempgrid[r][c]
-					}
-				} else {
-					grid[r][c+1] = tempgrid[r][c]
-				}
+				extract = grid[r][c]
+				grid[r][c] = next // 上一个元素赋值到此处
+				next = extract
 			}
 		}
-		// 一次变换结束后，需要将grid重新拷贝到temp中
-		copy(tempgrid, grid)
-		// log.Println(tempgrid)
+		log.Println(grid)
 		k--
 	}
 	return grid
@@ -858,10 +847,10 @@ func main() {
 	// 	{4, 5, 6},
 	// 	{7, 8, 9},
 	// }
-	// log.Println(shiftGrid(grid, 101))
+	// log.Println(shiftGrid(grid, 104))
 
-	// 移动零
-	arr := []int{0, 1, 0, 3, 12}
-	moveZeroes(arr)
-	log.Println(arr)
+	// // 移动零
+	// arr := []int{0, 1, 0, 3, 12}
+	// moveZeroes(arr)
+	// log.Println(arr)
 }
