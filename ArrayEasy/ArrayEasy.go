@@ -676,6 +676,64 @@ func moveZeroes(nums []int) { // 283. 移动零
 	}
 }
 
+// func isToeplitzMatrix(matrix [][]int) bool { // 766. 托普利茨矩阵
+// 	// 如果矩阵存储在磁盘上，并且磁盘内存是有限的，因此一次最多只能将一行矩阵加载到内存中，该怎么办？
+// 	// 如果矩阵太大以至于只能一次将部分行加载到内存中，该怎么办？
+
+// 	// 思路:一次加载一行
+// 	if len(matrix) == 0 || len(matrix[0]) == 0 || len(matrix) == 1 || len(matrix[0]) == 1 {
+// 		return true
+// 	}
+
+// 	var tempMatrix = make([]int, len(matrix[0])) // 内存空间一行
+// 	tempMatrix = matrix[0]                       // 内存空间初始化
+// 	for r := 1; r < len(matrix); r++ {
+// 		for c := len(matrix[0]) - 1; c >= 0; c-- {
+// 			tempMatrix[c] = matrix[r][c] //
+// 		}
+
+// 		tempMatrix = matrix[r] // 加载当前行
+// 		// 比较和
+
+// 	}
+
+// }
+
+func dominantIndex(nums []int) int { // 747. 至少是其他数字两倍的最大数
+	// 思路:遍历数组记录当前的最大数字和第二大数字的位置
+	if len(nums) == 0 {
+		return -1
+	}
+	if len(nums) == 1 {
+		return 0
+	}
+	var maxindex = 0    // 当前数组中最大元素的位置
+	var secondindex int // 当前数组中次大元素的位置
+	for k, v := range nums {
+		if v > nums[maxindex] { // 首先和max进行比较 大于max
+			secondindex = maxindex
+			maxindex = k
+		} else if v > nums[secondindex] { // 和次大比较
+			secondindex = k
+		}
+	}
+
+	if maxindex == secondindex && maxindex == 0 { // 如果第一个元素即为最大元素
+		var rflag = 0
+		for i := 1; i < len(nums); i++ {
+			if nums[maxindex] < nums[i]*2 {
+				rflag = -1
+			}
+		}
+		return rflag
+	}
+
+	if nums[maxindex] >= nums[secondindex]*2 { // 比较次大的两倍和最大元素
+		return maxindex
+	}
+	return -1
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -853,4 +911,16 @@ func main() {
 	// arr := []int{0, 1, 0, 3, 12}
 	// moveZeroes(arr)
 	// log.Println(arr)
+
+	// // 托普利茨矩阵
+	// matrix := [][]int{
+	// 	{1, 2, 3, 4},
+	// 	{5, 1, 2, 3},
+	// 	{9, 5, 1, 2},
+	// }
+	// log.Println(isToeplitzMatrix(matrix))
+
+	// 至少是其他数字两倍的最大数
+	nums := []int{0, 0, 2, 3}
+	log.Println(dominantIndex(nums))
 }
