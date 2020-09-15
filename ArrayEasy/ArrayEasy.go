@@ -766,6 +766,19 @@ func matrixReshape(nums [][]int, r int, c int) [][]int { // 566. 重塑矩阵
 	}
 }
 
+func search(nums []int, target int) int { // 剑指 Offer 53 - I. 在排序数组中查找数字 I
+	var count = 0
+	if len(nums) == 0 {
+		return count
+	}
+	for _, v := range nums {
+		if v == target {
+			count++
+		}
+	}
+	return count
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -961,4 +974,8 @@ func main() {
 	// 	{1, 2, 3, 4},
 	// }
 	// log.Println(matrixReshape(nums, 2, 2))
+
+	// // 在排序数组中查找数字
+	// nums := []int{5, 7, 7, 8, 8, 10}
+	// log.Println(search(nums, 8))
 }
