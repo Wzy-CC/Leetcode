@@ -793,6 +793,43 @@ func fib(N int) int { // 509. 斐波那契数
 	return fib(N-1) + fib(N-2)
 }
 
+func checkStraightLine(coordinates [][]int) bool { // 1232. 缀点成线
+	// 直接求得直线方程
+	if len(coordinates) == 2 { // 只存在两个点
+		return true
+	}
+	// 先判断数组中是否存在两个点竖直的情况，如果没有则直接求得直线方程，若有则分情况判断
+	var findSameNum = make(map[int]int) // 记录每个x坐标出现的次数
+	var xflag = 0                       // xflag 0不需要考虑斜率不存在情况 xflag 1需要考虑
+	for _, coordinate := range coordinates {
+		if _, ok := findSameNum[coordinate[0]]; ok { // 已存在
+			findSameNum[coordinate[0]]++
+			if findSameNum[coordinate[0]] > 1 {
+				xflag = 1
+			}
+		} else {
+			findSameNum[coordinate[0]] = 1
+		}
+	}
+	if xflag == 1 {
+		if len(findSameNum) == 1 { // 如果只存在一个数值
+			return true
+		} else {
+			return false
+		}
+	} else {
+		// 通过前两个点计算直线方程 y = kx + c 浮点数计算精度问题
+		k := float64(coordinates[1][1]-coordinates[0][1]) / float64(coordinates[1][0]-coordinates[0][0])
+		c := float64(coordinates[0][1]) - float64(coordinates[0][0])*k
+		for _, coordinate := range coordinates {
+			if float64(coordinate[0])*k+c != float64(coordinate[1]) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -995,4 +1032,12 @@ func main() {
 
 	// // 斐波那契数
 	// log.Println(fib(4))
+
+	// // 缀点成线
+	// coordinates := [][]int{
+	// 	{0, 0},
+	// 	{0, 1},
+	// 	{0, -1},
+	// }
+	// log.Println(checkStraightLine(coordinates))
 }
