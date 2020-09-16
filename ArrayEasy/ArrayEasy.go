@@ -779,6 +779,20 @@ func search(nums []int, target int) int { // 剑指 Offer 53 - I. 在排序数�
 	return count
 }
 
+func fib(N int) int { // 509. 斐波那契数
+	// 递归解法 fib(n) = fib(n-1) + fib(n-2)
+	// 非递归解法
+	// 矩阵运算分治法
+
+	if N == 0 {
+		return 0
+	}
+	if N == 1 {
+		return 1
+	}
+	return fib(N-1) + fib(N-2)
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -978,4 +992,7 @@ func main() {
 	// // 在排序数组中查找数字
 	// nums := []int{5, 7, 7, 8, 8, 10}
 	// log.Println(search(nums, 8))
+
+	// // 斐波那契数
+	// log.Println(fib(4))
 }
