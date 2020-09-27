@@ -264,6 +264,50 @@ func minimumTotal(triangle [][]int) int { // 120. 三角形最小路径和
 	}
 }
 
+// func pancakeSort(A []int) []int { // 969. 煎饼排序
+// 	// 煎饼翻转：我们选择一些正整数 k <= A.length，然后反转 A 的前 k 个元素的顺序。我们要执行零次或多次煎饼翻转（按顺序一次接一次地进行），任何将数组排序且翻转次数在 10 * A.length 范围内的有效答案都将被判断为正确。
+// 	var kseq []int // 返回k序列
+// 	// check := func(a []int) bool { // 检查函数，检查A数组是否需要煎饼反转操作
+// 	// 	for k,v := range a {
+// 	// 		if
+// 	// 	}
+// 	// }
+// 	reverse := func(a []int, k int) { // 定义反转操作:原地交换
+// 		for i := 0; i < (k+1)/2; i++ { // k兼容奇数/偶数
+// 			a[i], a[k-i-1] = a[k-i-1], a[i] // 交换
+// 		}
+// 	}
+// 	// N次反转后保证最大元素位于序列右侧
+
+// 	return kseq
+// }
+
+// func backtrace() {
+// 	// for k,choice := range choices {
+// 	// 	// 选择下一个元素
+// 	// 	// 撤销选择
+// 	// }
+// 	back
+// }
+func subsets(nums []int) [][]int { // 78. 子集
+	// 思路1:使用回溯算法
+	// 思路2:递归每次递增子集添加到结果中
+	if len(nums) == 0 {
+		return [][]int{{}}
+	}
+	var results = [][]int{}
+	results = append(results, []int{}) // 首先添加空集
+	for _, v := range nums {
+		for _, result := range results { // 每添加一个数 需要将results中
+			result = append(result, v)
+			results = append(results, result) // 每次生成新的集合加入
+			log.Println(">>>", len(result), cap(result))
+			log.Println(results)
+		}
+	}
+	return results
+}
+
 func main() {
 	log.Println("ArrayMedium")
 
@@ -321,4 +365,12 @@ func main() {
 	// 	{4, 1, 8, 3},
 	// }
 	// log.Println(minimumTotal(triangle))
+
+	// // 煎饼排序
+	// array := []int{3, 2, 4, 1}
+	// log.Println(pancakeSort(array))
+
+	// 子集
+	nums := []int{1, 2, 3, 4, 5, 6}
+	log.Println(subsets(nums))
 }

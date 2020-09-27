@@ -1,3 +1,5 @@
+// leetcode Array Easy
+
 package main
 
 import (
@@ -830,6 +832,17 @@ func checkStraightLine(coordinates [][]int) bool { // 1232. 缀点成线
 	return true
 }
 
+func findRepeatNumber(nums []int) int { // 剑指 Offer 03. 数组中重复的数字
+	var m = make(map[int]int)
+	for _, v := range nums {
+		if _, ok := m[v]; ok { // if key exists
+			return v
+		}
+		m[v] = 1
+	}
+	return 0
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -1040,4 +1053,8 @@ func main() {
 	// 	{0, -1},
 	// }
 	// log.Println(checkStraightLine(coordinates))
+
+	// // 数组中重复的数字
+	// arr := []int{2, 3, 1, 0, 2, 5, 3}
+	// log.Println(findRepeatNumber(arr))
 }
