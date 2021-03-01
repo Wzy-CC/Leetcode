@@ -25,7 +25,7 @@ func hasCycleMap(head *ListNode) bool { // 141.环形链表
 }
 
 func hasCycle(head *ListNode) bool { // 141.环形链表
-	// 思路二：使用快慢指针，相遇则存在环形
+	// 思路二：使用快慢指针，相遇则一定存在环形
 	fast, slow := head, head
 
 	for fast != nil && fast.Next != nil {
