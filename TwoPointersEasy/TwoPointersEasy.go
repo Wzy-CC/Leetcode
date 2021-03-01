@@ -9,18 +9,33 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func hasCycle(head *ListNode) bool { // 141.环形链表
+func hasCycleMap(head *ListNode) bool { // 141.环形链表
 	// 思路一：使用map来记录是否遍历同一个节点两次 时间复杂度O(n)
-	// 思路二：时间复杂度为O(1)的算法
 	var m = make(map[*ListNode]int) // 节点被遍历的次数
-	pos := -1
+
 	for head != nil {
-		head = head.Next
+		if m[head] == 2 {
+			return true
+		}
+		m[head]++
+		head = head.Next // 添加至map中
 	}
-	if pos == -1 {
-		return false
+
+	return false
+}
+
+func hasCycle(head *ListNode) bool { // 141.环形链表
+	// 思路二：使用快慢指针，相遇则存在环形
+	fast, slow := head, head
+
+	for fast != nil && fast.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+		if fast == slow {
+			return true
+		}
 	}
-	return true
+	return false
 }
 
 func main() {
@@ -38,6 +53,7 @@ func main() {
 		Val:  1,
 		Next: &l2,
 	}
+	l3.Next = &l1
 
 	log.Println(hasCycle(&l1)) // 141.环形链表
 }
