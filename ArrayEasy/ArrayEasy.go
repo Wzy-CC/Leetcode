@@ -843,6 +843,26 @@ func findRepeatNumber(nums []int) int { // 剑指 Offer 03. 数组中重复的�
 	return 0
 }
 
+func maximumWealth(accounts [][]int) int { // 1672. 最富有客户的资产总量
+	// 二维数组，按照列遍历即可
+	var max int
+	var account = make([]int, 0)
+	for i := 0; i < len(accounts); i++ {
+		total := 0
+		for j := 0; j < len(accounts[i]); j++ {
+			total = accounts[i][j] + total
+		}
+		account = append(account, total)
+	}
+
+	for _, v := range account {
+		if v > max {
+			max = v
+		}
+	}
+	return max
+}
+
 func main() {
 	log.Println("ArrayEasy")
 
@@ -1057,4 +1077,8 @@ func main() {
 	// // 数组中重复的数字
 	// arr := []int{2, 3, 1, 0, 2, 5, 3}
 	// log.Println(findRepeatNumber(arr))
+
+	// 最富有客户的资产总量
+	accounts := [][]int{{1, 2, 3}, {3, 2, 1}}
+	log.Println(maximumWealth(accounts))
 }
