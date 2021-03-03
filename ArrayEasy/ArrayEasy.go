@@ -678,28 +678,32 @@ func moveZeroes(nums []int) { // 283. 移动零
 	}
 }
 
-// func isToeplitzMatrix(matrix [][]int) bool { // 766. 托普利茨矩阵
-// 	// 如果矩阵存储在磁盘上，并且磁盘内存是有限的，因此一次最多只能将一行矩阵加载到内存中，该怎么办？
-// 	// 如果矩阵太大以至于只能一次将部分行加载到内存中，该怎么办？
+func isToeplitzMatrix(matrix [][]int) bool { // 766. 托普利茨矩阵
+	// 如果矩阵存储在磁盘上，并且磁盘内存是有限的，因此一次最多只能将一行矩阵加载到内存中，该怎么办？
+	// 如果矩阵太大以至于只能一次将不完整的一行加载到内存中，该怎么办？
+	isToep := true
 
-// 	// 思路:一次加载一行
-// 	if len(matrix) == 0 || len(matrix[0]) == 0 || len(matrix) == 1 || len(matrix[0]) == 1 {
-// 		return true
-// 	}
+	// 特殊边界情况返回
+	if len(matrix) == 0 || len(matrix[0]) == 0 || len(matrix) == 1 || len(matrix[0]) == 1 {
+		return true
+	}
 
-// 	var tempMatrix = make([]int, len(matrix[0])) // 内存空间一行
-// 	tempMatrix = matrix[0]                       // 内存空间初始化
-// 	for r := 1; r < len(matrix); r++ {
-// 		for c := len(matrix[0]) - 1; c >= 0; c-- {
-// 			tempMatrix[c] = matrix[r][c] //
-// 		}
+	var oneRow = make([]int, len(matrix[0])) // 内存空间一行
+	_ = copy(oneRow, matrix[0])              // 内存空间初始化
 
-// 		tempMatrix = matrix[r] // 加载当前行
-// 		// 比较和
+	for r := 1; r < len(matrix); r++ {
+		// 逐项比较
+		for i := 0; i < len(oneRow)-1; i++ {
+			if matrix[r][i+1] != oneRow[i] {
+				isToep = false
+			}
+		}
+		// 加载
+		_ = copy(oneRow, matrix[r])
+	}
 
-// 	}
-
-// }
+	return isToep
+}
 
 func dominantIndex(nums []int) int { // 747. 至少是其他数字两倍的最大数
 	// 思路:遍历数组记录当前的最大数字和第二大数字的位置
@@ -1041,13 +1045,13 @@ func main() {
 	// moveZeroes(arr)
 	// log.Println(arr)
 
-	// // 托普利茨矩阵
-	// matrix := [][]int{
-	// 	{1, 2, 3, 4},
-	// 	{5, 1, 2, 3},
-	// 	{9, 5, 1, 2},
-	// }
-	// log.Println(isToeplitzMatrix(matrix))
+	// 托普利茨矩阵
+	matrix := [][]int{
+		{1, 2, 3, 4},
+		{5, 1, 2, 3},
+		{9, 5, 1, 2},
+	}
+	log.Println(isToeplitzMatrix(matrix))
 
 	// // 至少是其他数字两倍的最大数
 	// nums := []int{0, 0, 2, 3}
@@ -1078,7 +1082,7 @@ func main() {
 	// arr := []int{2, 3, 1, 0, 2, 5, 3}
 	// log.Println(findRepeatNumber(arr))
 
-	// 最富有客户的资产总量
-	accounts := [][]int{{1, 2, 3}, {3, 2, 1}}
-	log.Println(maximumWealth(accounts))
+	// // 最富有客户的资产总量
+	// accounts := [][]int{{1, 2, 3}, {3, 2, 1}}
+	// log.Println(maximumWealth(accounts))
 }
